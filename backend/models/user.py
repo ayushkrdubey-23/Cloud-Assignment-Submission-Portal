@@ -7,9 +7,6 @@ from .database import Base
 
 
 class User(Base):
-    """
-    Represents a student, teacher, or administrator.
-    """
 
     __tablename__ = "users"
 
@@ -31,6 +28,11 @@ class User(Base):
         index=True
     )
 
+    password_hash = Column(
+        String(255),
+        nullable=False
+    )
+
     role = Column(
         String(20),
         nullable=False,
@@ -39,11 +41,9 @@ class User(Base):
 
     created_at = Column(
         DateTime,
-        default=lambda: datetime.now(timezone.utc),
-        nullable=False
+        default=lambda: datetime.now(timezone.utc)
     )
 
-    # Relationships
     courses = relationship(
         "Course",
         back_populates="teacher"

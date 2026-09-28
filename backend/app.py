@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 import os
 
 from cloud.database_service import initialize_database
+from backend.routes.auth_routes import router as auth_router
 
 
 # Load environment variables
@@ -20,6 +21,7 @@ ENVIRONMENT = os.getenv(
 )
 
 
+# Create FastAPI application
 app = FastAPI(
     title=APP_NAME,
     description=(
@@ -28,6 +30,10 @@ app = FastAPI(
     ),
     version="1.0.0",
 )
+
+
+# Register authentication routes
+app.include_router(auth_router)
 
 
 @app.on_event("startup")

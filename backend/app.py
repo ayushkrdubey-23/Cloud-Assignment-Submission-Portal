@@ -3,7 +3,10 @@ from dotenv import load_dotenv
 import os
 
 from cloud.database_service import initialize_database
+
 from backend.routes.auth_routes import router as auth_router
+from backend.routes.course_routes import router as course_router
+from backend.routes.assignment_routes import router as assignment_router
 
 
 # Load environment variables
@@ -32,8 +35,10 @@ app = FastAPI(
 )
 
 
-# Register authentication routes
+# Register API routes
 app.include_router(auth_router)
+app.include_router(course_router)
+app.include_router(assignment_router)
 
 
 @app.on_event("startup")
@@ -41,7 +46,6 @@ def startup_event():
     """
     Initialize database tables when the backend starts.
     """
-
     initialize_database()
 
 
@@ -50,7 +54,6 @@ def root():
     """
     Root endpoint used to verify that the backend is running.
     """
-
     return {
         "message": "Cloud Assignment Submission Portal API is running",
         "environment": ENVIRONMENT,
@@ -63,7 +66,6 @@ def health_check():
     """
     Health-check endpoint for monitoring and deployment checks.
     """
-
     return {
         "status": "healthy",
         "service": "backend",
@@ -77,7 +79,6 @@ def database_status():
     Basic endpoint confirming that the application can
     initialize and access its configured database.
     """
-
     return {
         "status": "connected",
         "database": "configured"

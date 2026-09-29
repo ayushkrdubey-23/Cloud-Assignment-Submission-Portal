@@ -16,6 +16,11 @@ from .database import Base
 class Submission(Base):
     """
     Represents a student's assignment submission.
+
+    Multiple submissions can exist for the same assignment.
+    Each submission receives a version number so that
+    resubmissions can be tracked without overwriting
+    previous files.
     """
 
     __tablename__ = "submissions"
@@ -38,6 +43,12 @@ class Submission(Base):
         ForeignKey("users.user_id"),
         nullable=False,
         index=True
+    )
+
+    version_number = Column(
+        Integer,
+        nullable=False,
+        default=1
     )
 
     file_name = Column(
@@ -83,7 +94,6 @@ class Submission(Base):
         nullable=True
     )
 
-    # Relationships
     assignment = relationship(
         "Assignment",
         back_populates="submissions"
